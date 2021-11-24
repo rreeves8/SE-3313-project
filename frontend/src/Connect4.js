@@ -2,8 +2,15 @@ import './App.css';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import socketIOClient from "socket.io-client";
+import './Connect4.css';
 
 const ENDPOINT = "http://127.0.0.1:4001";
+
+/*
+    scroll to bottom for description
+
+*/
+
 
 function Cell(props){//react function for creating a circle element or cell, the color of the cell is passed through props
     return <div className = 'cell'>
@@ -21,7 +28,6 @@ function Column(props){  //react function for creating a collum, each collum hol
                         x = {props.x}
                         color = {props.cells[j]} //assign the color of the cell from the collumns list of colors
                       ></Cell>
-        
     }
     
     return <div className="collumn" onClick = {() => props.handleClick()}> 
@@ -30,7 +36,7 @@ function Column(props){  //react function for creating a collum, each collum hol
 }
 
 
-class Grid extends Component {
+class Grid extends React.Component {
     constructor(){
         super();
         var newCells =  Array.from(Array(7), () => {
@@ -39,10 +45,13 @@ class Grid extends Component {
         
         this.state = { 
             cells: newCells,
+            player: '',
             playerTurn: 'red',
             winner: ''
-        } //set the initial state to the first player being red, no winner, and assign the empty cells array to the state
+        }
     }
+
+
 
     handleClick(columnNum) {        
         if(this.state.winner === ''){  //if no winner lets check add another circle and check if theres a winner
@@ -56,7 +65,7 @@ class Grid extends Component {
                     this.setState({
                         cells: newCells,    
                         playerTurn: (prevState.playerTurn === 'red') ? 'black' : 'red',
-                        winner: this.checkWinner(newCells)
+
                     })
                     //set the new state and add the new color, when assigning the new winner state call the function check winner to see if theres a winer based on the new set of cells
                     break;
@@ -89,9 +98,12 @@ class Grid extends Component {
 }
 
 
-
 class Connect4 extends React.Component {
     render(){
+        //create a socket connection to the server, player id is there ip, submit the cells list to the socket and wait for a resposne if winner or not,
+        //if not winner, dont allow the user to do anything, make socket io cause react to wait for other user to attempt
+        //should be waiting for two events, a winner or another turn, just repeat till board is either filled or a winner is declared.
+
         return(
             <div>
                 <a>Connect4</a>

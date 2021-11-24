@@ -1,8 +1,16 @@
-const io = require('socket.io')(3000)
+const express = require('express')
+const path = require('path')
+const http = require('http') 
+const socketio = require('socket.io')
+
+const app = express()
+const server = http.createServer(app)
+const io = socketio(server)
 
 let socketStack = []
-
 let activeGames = []
+let queueGames = []
+const port = 3000 || process.env.port
 
 function newGame(playerId1, playerId2, color1, color2){
     let cells =  Array.from(Array(7), () => {return new Array(6).fill('none')})
@@ -46,7 +54,6 @@ function updateCells(playerId1, color, cooridnate){
 }
 
 function checkWinner(cells){
-    let cells;
     for(let i = 0; i < activeGames.length; i++){
         if(activeGames[i].p1.playerId === playerId1){
             cells = activeGames[i].game.cells;
@@ -136,39 +143,29 @@ function checkCells(cells, x, y){
 }
 
 
-io.onconnection("connection", (socket) =>{
-
-})
-
-
-
-
-
-
-//steal code from below
-
-/*
+app.use(express.static(path.join(__dirname, '/frontend/build')))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, '/frontend/build')));
-
-
-app.get('/api/getvalues', (request,response) => {
-    let conn = newConnection();
-    //get values in table, 
+io.on('connection',socket => {
+    console.log("new ws conn");
 })
-app.post('/api/setAvailable', jsonParser, (request,response) => {
-app.listen(port, () => console.log(`Listening on port ${port}`));
 
-});
-*/
+app.get('/api/availablegames', (request,response) => {
+    let currGames = [];
+    for(let i = 0; i < queueGames.length; i++){
+        let curr = queueGames[i]
 
+    }
+})
 
+app.post('/api/newgame', (request,response) => {
+    //get index of queueGames requested
+    //move the queuegame to active game
+    //respond with active game data
+})
 
-
-
-
+app.listen(port, () => console.log('Running on ' + port))
 
 
 
