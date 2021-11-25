@@ -95,7 +95,7 @@ class Home extends React.Component {
                         <label>Username : </label>   
                         <input value = {this.state.playerName} onChange={this.inputUserName} type="text" placeholder="Enter Username" name="username" />  
                         <DropDown value = {this.state.playerName} userNames = {this.state.userNames} onChange = {this.selectGame}/>
-                        <button className = 'entry' onClick = {() => this.logIn()}>LogIn</button>
+                        <Link to ='/Connect4' className = 'entry' onClick = {() => this.logIn()}>LogIn</Link>
                         
                     </ul>
         }
