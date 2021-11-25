@@ -148,14 +148,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 io.on('connection',socket => {
-    console.log("new ws conn");
+    socket.on("newgame", ({ cells,playerId1, playerId2 }) => {
+        
+    });
+
+
+
 })
 
 app.get('/api/availablegames', (request,response) => {
     let currGames = [];
     for(let i = 0; i < queueGames.length; i++){
         let curr = queueGames[i]
-
     }
 })
 
