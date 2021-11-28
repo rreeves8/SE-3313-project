@@ -24,11 +24,14 @@ class App extends React.Component {
         return (
             <Router>
                 <Switch>
+                    {/*default routes to home
                     <Route exact path='/'>
-                        {/*default routes to home*/}
+                        
                         <Home setId = {this.setPlayerId}/>
                     </Route>
-                    <Route exact path='/Connect4'>
+                    */}
+
+                    <Route exact path='/'>
                         <Connect4 id = {this.state.playerId}/>
                     </Route>
                 </Switch>

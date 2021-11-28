@@ -68,3 +68,10 @@
   top: -700px;
   transition: transform 0.5s;
 }
+
+.turn{
+  position: absolute;
+  top: 30%;
+  left: 10%;
+  font-size: 100px;
+}

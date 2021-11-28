@@ -11,7 +11,6 @@ const ENDPOINT = "http://127.0.0.1:4001";
 
 */
 
-
 function Cell(props){//react function for creating a circle element or cell, the color of the cell is passed through props
     return <div className = 'cell'>
                <div className = {props.color}>  
@@ -46,12 +45,11 @@ class Grid extends React.Component {
         this.state = { 
             cells: newCells,
             player: '',
-            playerTurn: 'red',
-            winner: ''
+            playerTurn: '',
+            winner: '',
+            socket: socketIOClient(ENDPOINT)
         }
     }
-
-
 
     handleClick(columnNum) {        
         if(this.state.winner === ''){  //if no winner lets check add another circle and check if theres a winner
@@ -65,9 +63,8 @@ class Grid extends React.Component {
                     this.setState({
                         cells: newCells,    
                         playerTurn: (prevState.playerTurn === 'red') ? 'black' : 'red',
-
                     })
-                    //set the new state and add the new color, when assigning the new winner state call the function check winner to see if theres a winer based on the new set of cells
+                    
                     break;
                 }
             }
@@ -106,8 +103,8 @@ class Connect4 extends React.Component {
 
         return(
             <div>
-                <a>Connect4</a>
-                <Link to = '/'> return home</Link>
+                <a className = "info"></a>         
+                <a className = "turn">red </a>
                 <Grid/>
             </div>
         )

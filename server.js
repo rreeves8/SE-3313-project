@@ -148,9 +148,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 io.on('connection',socket => {
-    socket.on("newgame", ({ cells,playerId1, playerId2 }) => {
-        
-    });
+    socket.on('disconnect')
 
 
 
