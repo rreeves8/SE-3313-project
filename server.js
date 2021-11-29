@@ -51,6 +51,12 @@ function updateCells(playerId1, color, cooridnate){
     if(win !== ''){
         return win;
     }
+    for(let y = 6; y > -1; y--){ //cycle through the state double array, where the clicked collumn indicated which array to select
+        if(this.state.cells[columnNum][y] === 'none'){ //cycle upward through the collumn until and empty spot is found
+
+            let prevState = this.state; //capture the current state and assign new values
+            let newCells = this.state.cells;
+            newCells[columnNum][y] = prevState.playerTurn; 
 }
 
 function checkWinner(cells){
@@ -141,6 +147,8 @@ function checkCells(cells, x, y){
     
     return ''
 }
+
+
 
 
 app.use(express.static(path.join(__dirname, '/frontend/build')))

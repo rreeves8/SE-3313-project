@@ -40,7 +40,7 @@ class Grid extends React.Component {
         super();
         var newCells =  Array.from(Array(7), () => {
             return new Array(6).fill('none')
-        })//create and empty double array with each color being none, or just blank
+        })
         
         this.state = { 
             cells: newCells,
@@ -53,21 +53,13 @@ class Grid extends React.Component {
 
     handleClick(columnNum) {        
         if(this.state.winner === ''){  //if no winner lets check add another circle and check if theres a winner
-            for(let y = 6; y > -1; y--){ //cycle through the state double array, where the clicked collumn indicated which array to select
-                if(this.state.cells[columnNum][y] === 'none'){ //cycle upward through the collumn until and empty spot is found
- 
-                    let prevState = this.state; //capture the current state and assign new values
-                    let newCells = this.state.cells;
-                    newCells[columnNum][y] = prevState.playerTurn; 
+            
 
-                    this.setState({
-                        cells: newCells,    
-                        playerTurn: (prevState.playerTurn === 'red') ? 'black' : 'red',
-                    })
-                    
-                    break;
-                }
-            }
+            this.setState({
+                cells: newCells,    
+                playerTurn: (prevState.playerTurn === 'red') ? 'black' : 'red',
+            })
+                               
         }
     }
     

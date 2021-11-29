@@ -8,17 +8,7 @@ import api from './api/api'
 class App extends React.Component {
     constructor(props){
         super(props)
-        this.state = {
-            playerId: '',
-        }
     }
-
-    setPlayerId(usr){
-        this.setState({
-            playerId: usr
-        })
-    }
-    
     
     render(){
         return (
@@ -32,7 +22,7 @@ class App extends React.Component {
                     */}
 
                     <Route exact path='/'>
-                        <Connect4 id = {this.state.playerId}/>
+                        <Connect4/>
                     </Route>
                 </Switch>
             </Router>
