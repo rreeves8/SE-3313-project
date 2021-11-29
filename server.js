@@ -66,6 +66,7 @@ function updateCells(playerId1, color, cooridnate){
     if(win !== ''){
         return win;
     }
+    //broken
     for(let y = 6; y > -1; y--){ //cycle through the state double array, where the clicked collumn indicated which array to select
         if(this.state.cells[columnNum][y] === 'none'){ //cycle upward through the collumn until and empty spot is found
 
@@ -160,8 +161,7 @@ function checkCells(cells, x, y){
             }
         }
 
-    }
-    
+    } 
     return ''
 }
 
@@ -204,35 +204,35 @@ app.get('/api/userNames', (request,response) => {
 app.post('/api/newUserName', jsonParser, (request,response) => {
     console.log(request.body)
     let data = '';
-    var bodyLength = Object.keys(request.body).length;
+    var bodyLength = Object.keys(request.body.name).length;
 
     for(let i = 0; i < bodyLength; i ++){
-        console.log(request.body[i.toString()])
-        data += request.body[i.toString()] 
+        console.log(request.body.name[i.toString()])
+        data += request.body.name[i.toString()] 
         console.log(data)
     }
 
     
 
-    if(usrNames.length > 0){
+    if(request.body.type === 'new'){
         for(let i = 0; i < usrNames.length; i ++){
             if(data === usrNames[i]){
-                response.json("error name already exists")
+                return response.json("error name already exists")
             }
         }
 
         for(let i = 0; i < activeUsrs.length; i ++){
             if(data === activeUsrs.length){
-                response.json("error name is in play")
+                return response.json("error name is in play")
             }
         }
     }
-    else{
-        usrNames[usrNames.length] = data; 
-        response.json("good")
+    if(request.body.type !== 'saved'){
+        usrNames.push(data); 
     }
     console.log(usrNames)
 
+    return response.json("good")
 })
 
 app.listen(port, () => console.log('Running on ' + port))

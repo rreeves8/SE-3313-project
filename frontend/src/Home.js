@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useState } from 'react';
-import { withRouter  } from 'react-router-dom';
+import { Link  } from 'react-router-dom';
 import api from './api/api';
 
 function DropDown(props){
@@ -17,10 +17,6 @@ function DropDown(props){
     )
 }
 
-function Conenct4Launch(){
-
-}
-
 class Home extends React.Component {
     constructor(props){
         super(props);
@@ -28,7 +24,8 @@ class Home extends React.Component {
         this.state = {
             playerName: '',
             loggedIn: false,
-            userNames: null
+            userNames: null,
+            droppedDown: false
         }
 
         this.selectName = this.selectName.bind(this)
@@ -53,8 +50,20 @@ class Home extends React.Component {
     async setUserName () {
         console.log("setting user name")
         console.log(this.state.playerName)
+        
+        let type = 'saved';
+
+        if(!this.state.droppedDown){
+            type = 'new'
+        }
+
+        let data = {
+            name: this.state.playerName,
+            type: type
+        }
+        
         const response = await api.post('/api/newUserName', {
-            ...this.state.playerName
+            ...data
         })
         .then((response) =>{      
             if(response.data !== 'good'){
@@ -82,8 +91,7 @@ class Home extends React.Component {
             console.log("logged in")
         }
         if(loggedIn){
-            console.log("switching to conect4")
-            history.push('/Connect4')          
+            console.log("switching to conect4")  
         }
         
         this.setState({
@@ -91,52 +99,46 @@ class Home extends React.Component {
         })
     }
 
-    inputUserName(event){
+    inputUserName(event){ 
         this.setState({
-            playerName: event.target.value
+            playerName: event.target.value,
+            droppedDown: false
         })
     }
 
     selectName(event){
         this.setState({
-            playerName: event.target.value
+            playerName: event.target.value,
+            droppedDown: true
         })
     }
 
     render(){
-        let queuedGamesHtml = []
-        let login = <Link to ='/Connect4'>Start Game</Link>
-
-        const Button = withRouter(({ history }) => (
-            <button className = 'entry' onClick = {() => this.logIn()}>LogIn</button>
-        ))
-
+        let login;
+        
         if(this.state.userNames === null){
             this.getUserNames();
         }
-        if(this.state.userNames !== null){
+
+        else if (this.state.userNames !== null){
             if(!this.state.loggedIn){
                 login =  <ul>
                             <label>Username : </label>   
                             <input value = {this.state.playerName} onChange={this.inputUserName} type="text" placeholder="Enter Username" name="username" />  
                             <DropDown value = {this.state.playerName} userNames = {this.state.userNames} onChange = {this.selectName}/>
-                            
-                            
+                            <button className = 'entry' onClick = {() => this.logIn()}>LogIn</button>          
                         </ul>
             }
             else{
-                for(let i = 0; i < this.state.queuedGames.length; i ++){
-                    queuedGamesHtml[i] = <a id = {i} onClick = {() => this.selectGame()}>{this.state.queuedGames[i].fillCount}</a>
-                }
+                login = <Link to ='/Connect4'>Start Game</Link>
             }
         }
+
 
         return(
             <div className="App">
                 <header className = "title">Home</header>
-                <div>
-                    {queuedGamesHtml}
-                </div>
+                
                 <div className = "submission-holder">
                     {login}
 				</div>
