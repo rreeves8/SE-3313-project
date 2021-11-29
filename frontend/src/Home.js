@@ -21,30 +21,14 @@ class Home extends React.Component {
     constructor(){
         super();
 
-        let game = {
-            fillCount: 1,
-        }
-
         this.state = {
-            queuedGames: [game,game,game,game],
             playerName: '',
             loggedIn: false,
-            userNames: ["magnus","david"]
+            userNames: null
         }
-        this.selectGame = this.selectGame.bind(this)
-        this.inputUserName = this.inputUserName.bind(this)
-    }
 
-    async getQueuedGames () {
-        try{
-            const response = await api.get('/api/availablegames')
-            this.setState({
-                queuedGames: response.data,
-            })
-        }
-        catch(err){
-            console.log(err)
-        }
+        this.selectName = this.selectName.bind(this)
+        this.inputUserName = this.inputUserName.bind(this)
     }
 
     async getUserNames () {
@@ -59,9 +43,24 @@ class Home extends React.Component {
         }
     }
 
+    async setUserName () {
+        const response = await api.post('/api/newTimeSlot', {
+            ...this.state.playerName
+        })
+        .then((response) =>{      
+            if(response.data !== 'error name already exists'){
+                alert()
+            }
+        }, 
+        (error) => {
+            console.log(response)
+        })
+        
+    }
+
     logIn(){
-        let usr;
-        if(this.state.playerName ===''){
+        let loggedIn = false;
+        if(this.state.playerName === ''){
 
         }
         
@@ -76,7 +75,7 @@ class Home extends React.Component {
         })
     }
 
-    selectGame(event){
+    selectName(event){
         this.setState({
             playerName: event.target.value
         })
@@ -86,15 +85,15 @@ class Home extends React.Component {
         let queuedGamesHtml = []
         let login = <Link to ='/Connect4'>Start Game</Link>
 
-        if(this.state.queuedGames === null){
+        if(this.state.userNames === null){
             this.getUserNames();
-            this.getQueuedGames();
         }
+
         if(!this.state.loggedIn){
             login =  <ul>
                         <label>Username : </label>   
                         <input value = {this.state.playerName} onChange={this.inputUserName} type="text" placeholder="Enter Username" name="username" />  
-                        <DropDown value = {this.state.playerName} userNames = {this.state.userNames} onChange = {this.selectGame}/>
+                        <DropDown value = {this.state.playerName} userNames = {this.state.userNames} onChange = {this.selectName}/>
                         <Link to ='/Connect4' className = 'entry' onClick = {() => this.logIn()}>LogIn</Link>
                         
                     </ul>

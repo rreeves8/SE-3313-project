@@ -9,6 +9,8 @@ const io = socketio(server)
 const port = 3000 || process.env.port
 
 let usrNames = []
+let activeUsrs = []
+
 let activeGames = []
 let queueGames = []
 
@@ -196,8 +198,24 @@ app.get('/api/userNames', (request,response) => {
 
 app.post('/api/newUserName', jsonParser, (request,response) => {
     let data = request.body;
-    usrNames[usrNames.length-1] 
-   
+
+    if(usrNames.length > 0){
+        for(let i = 0; i < usrNames.length; i ++){
+            if(data === usrNames[i]){
+                response.json("error name already exists")
+            }
+        }
+
+        for(let i = 0; i < activeUsrs.length; i ++){
+            if(data === activeUsrs.length){
+                response.json("error name is in play")
+            }
+        }
+    }
+    else{
+        usrNames[usrNames.length-1] = data; 
+    }
+    response.json("good")
 })
 
 app.listen(port, () => console.log('Running on ' + port))
