@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { withRouter  } from 'react-router-dom';
 import api from './api/api';
 
 function DropDown(props){
@@ -17,9 +17,13 @@ function DropDown(props){
     )
 }
 
+function Conenct4Launch(){
+
+}
+
 class Home extends React.Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
 
         this.state = {
             playerName: '',
@@ -69,12 +73,17 @@ class Home extends React.Component {
 
     logIn(){
         let loggedIn = false;
+
         if(this.state.playerName === ''){
             alert("please enter a name")
         }
         else{
             loggedIn = this.setUserName()
             console.log("logged in")
+        }
+        if(loggedIn){
+            console.log("switching to conect4")
+            history.push('/Connect4')          
         }
         
         this.setState({
@@ -98,6 +107,10 @@ class Home extends React.Component {
         let queuedGamesHtml = []
         let login = <Link to ='/Connect4'>Start Game</Link>
 
+        const Button = withRouter(({ history }) => (
+            <button className = 'entry' onClick = {() => this.logIn()}>LogIn</button>
+        ))
+
         if(this.state.userNames === null){
             this.getUserNames();
         }
@@ -107,7 +120,7 @@ class Home extends React.Component {
                             <label>Username : </label>   
                             <input value = {this.state.playerName} onChange={this.inputUserName} type="text" placeholder="Enter Username" name="username" />  
                             <DropDown value = {this.state.playerName} userNames = {this.state.userNames} onChange = {this.selectName}/>
-                            <button to ='/Connect4' className = 'entry' onClick = {() => this.logIn()}>LogIn</button>
+                            
                             
                         </ul>
             }
