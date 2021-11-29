@@ -6,11 +6,22 @@ const socketio = require('socket.io')
 const app = express()
 const server = http.createServer(app)
 const io = socketio(server)
+const port = 3000 || process.env.port
 
-let socketStack = []
+let usrNames = []
 let activeGames = []
 let queueGames = []
-const port = 3000 || process.env.port
+
+let queuedGame = {
+    playerWaiting: ''
+}
+
+let game = {
+    player1: '',
+    player2: '',
+    cells: [],
+    winner: ''
+}
 
 function newGame(playerId1, playerId2, color1, color2){
     let cells =  Array.from(Array(7), () => {return new Array(6).fill('none')})
@@ -149,30 +160,44 @@ function checkCells(cells, x, y){
 }
 
 
-
-
 app.use(express.static(path.join(__dirname, '/frontend/build')))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 io.on('connection',socket => {
+    let playerNum;
+    
+    socket.on('login', (usrName) => {
+        playerNum = numPlayers++;
+
+        if(queueGames.length > 0){
+            
+        }
+        else{
+            queueGames[queueGames.length - 1] = {
+                playerWaiting: playerNum
+            }
+        }
+
+
+
+
+    })
+    
     socket.on('disconnect')
 
 
 
 })
 
-app.get('/api/availablegames', (request,response) => {
-    let currGames = [];
-    for(let i = 0; i < queueGames.length; i++){
-        let curr = queueGames[i]
-    }
+app.get('/api/userNames', (request,response) => {
+    response.json(usrNames)
 })
 
-app.post('/api/newgame', (request,response) => {
-    //get index of queueGames requested
-    //move the queuegame to active game
-    //respond with active game data
+app.post('/api/newUserName', jsonParser, (request,response) => {
+    let data = request.body;
+    usrNames[usrNames.length-1] 
+   
 })
 
 app.listen(port, () => console.log('Running on ' + port))

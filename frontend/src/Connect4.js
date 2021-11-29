@@ -53,11 +53,11 @@ class Grid extends React.Component {
 
     handleClick(columnNum) {        
         if(this.state.winner === ''){  //if no winner lets check add another circle and check if theres a winner
-            
+            let newCells = this.state.cells;
 
             this.setState({
                 cells: newCells,    
-                playerTurn: (prevState.playerTurn === 'red') ? 'black' : 'red',
+                playerTurn: 'red',
             })
                                
         }

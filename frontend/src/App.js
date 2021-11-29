@@ -13,15 +13,11 @@ class App extends React.Component {
     render(){
         return (
             <Router>
-                <Switch>
-                    {/*default routes to home
-                    <Route exact path='/'>
-                        
+                <Switch> 
+                    <Route exact path='/'>               
                         <Home setId = {this.setPlayerId}/>
                     </Route>
-                    */}
-
-                    <Route exact path='/'>
+                    <Route exact path='/Connect4'>
                         <Connect4/>
                     </Route>
                 </Switch>
