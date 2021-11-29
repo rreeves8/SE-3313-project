@@ -170,12 +170,11 @@ app.use(express.static(path.join(__dirname, '/frontend/build')))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-io.on('connection',socket => {
-    let playerNum;
+io.on('connection',socket => {  
     
     socket.on('login', (usrName) => {
         playerNum = numPlayers++;
-
+        
         if(queueGames.length > 0){
             
         }

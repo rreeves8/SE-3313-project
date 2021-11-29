@@ -36,15 +36,17 @@ function Column(props){  //react function for creating a collum, each collum hol
 
 
 class Grid extends React.Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         var newCells =  Array.from(Array(7), () => {
             return new Array(6).fill('none')
         })
+
+ 
         
         this.state = { 
             cells: newCells,
-            player: '',
+            playerId: props.playerId,
             playerTurn: '',
             winner: '',
             socket: socketIOClient(ENDPOINT)
@@ -88,6 +90,16 @@ class Grid extends React.Component {
 
 
 class Connect4 extends React.Component {
+    constructor(props){
+        super(props)
+
+        console.log(props.playerId)
+        
+        this.state = {
+            playerId: props.playerId
+        }
+    }
+    
     render(){
         //create a socket connection to the server, player id is there ip, submit the cells list to the socket and wait for a resposne if winner or not,
         //if not winner, dont allow the user to do anything, make socket io cause react to wait for other user to attempt

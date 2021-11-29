@@ -25,7 +25,8 @@ class Home extends React.Component {
             playerName: '',
             loggedIn: false,
             userNames: null,
-            droppedDown: false
+            droppedDown: false,
+            setPlayerId: props.setPlayerId
         }
 
         this.selectName = this.selectName.bind(this)
@@ -71,6 +72,7 @@ class Home extends React.Component {
                 return false
             }
             else{
+                this.state.setPlayerId(this.state.playerName)
                 return true
             }
         }, 
@@ -89,9 +91,7 @@ class Home extends React.Component {
         else{
             loggedIn = this.setUserName()
             console.log("logged in")
-        }
-        if(loggedIn){
-            console.log("switching to conect4")  
+            
         }
         
         this.setState({
