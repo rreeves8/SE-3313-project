@@ -2,6 +2,8 @@ const express = require('express')
 const path = require('path')
 const http = require('http') 
 const socketio = require('socket.io')
+var bodyParser = require('body-parser')
+var jsonParser = bodyParser.json()
 
 const app = express()
 const server = http.createServer(app)
@@ -70,6 +72,8 @@ function updateCells(playerId1, color, cooridnate){
             let prevState = this.state; //capture the current state and assign new values
             let newCells = this.state.cells;
             newCells[columnNum][y] = prevState.playerTurn; 
+        }
+    }
 }
 
 function checkWinner(cells){
@@ -193,11 +197,22 @@ io.on('connection',socket => {
 })
 
 app.get('/api/userNames', (request,response) => {
+    console.log('getting user names')
     response.json(usrNames)
 })
 
 app.post('/api/newUserName', jsonParser, (request,response) => {
-    let data = request.body;
+    console.log(request.body)
+    let data = '';
+    var bodyLength = Object.keys(request.body).length;
+
+    for(let i = 0; i < bodyLength; i ++){
+        console.log(request.body[i.toString()])
+        data += request.body[i.toString()] 
+        console.log(data)
+    }
+
+    
 
     if(usrNames.length > 0){
         for(let i = 0; i < usrNames.length; i ++){
@@ -213,56 +228,12 @@ app.post('/api/newUserName', jsonParser, (request,response) => {
         }
     }
     else{
-        usrNames[usrNames.length-1] = data; 
+        usrNames[usrNames.length] = data; 
+        response.json("good")
     }
-    response.json("good")
+    console.log(usrNames)
+
 })
 
 app.listen(port, () => console.log('Running on ' + port))
 
-
-
-/*
-
-app.get('/api/availability', (request,response) => {
-    let conn = newConnection();
-    conn.connect();
-    conn.query("SELECT * FROM availability;",(err,rows,feilds) => {
-        if(err){
-            response.send("error: " + err)
-            console.log(err)
-        }
-        else{
-            response.json(rows)
-        }
-    })
-    conn.end();
-})
-
-app.post('/api/setAvailable', jsonParser, (request,response) => {
-    let conn = newConnection();
-    conn.connect();
-    let data = request.body;
-    console.log(data)
-    let string = "INSERT INTO availability VALUES (";
-    
-    for(let i = 0; i < 10; i ++){
-        string += data[i];
-        if(i != 9){
-            string +=",";
-        } 
-    }
-
-    conn.query("DELETE FROM availability", (error,rows,fields) => {
-        console.log(error);
-    })
-
-    conn.query(string + ");", (error,rows,fields) => {
-        console.log(error);
-    })
-    conn.end();
-})
-
-
-
-*/

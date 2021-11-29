@@ -28,15 +28,18 @@ class Home extends React.Component {
         }
 
         this.selectName = this.selectName.bind(this)
+        this.setUserName = this.setUserName.bind(this)
         this.inputUserName = this.inputUserName.bind(this)
     }
 
     async getUserNames () {
+        console.log("getting usernames")
         try{
-            const response = await api.get('/api/getusernames')
+            const response = await api.get('/api/userNames')
             this.setState({
-                queuedGames: response.data,
+                userNames: response.data,
             })
+            console.log(response.data)
         }
         catch(err){
             console.log(err)
@@ -44,12 +47,18 @@ class Home extends React.Component {
     }
 
     async setUserName () {
-        const response = await api.post('/api/newTimeSlot', {
+        console.log("setting user name")
+        console.log(this.state.playerName)
+        const response = await api.post('/api/newUserName', {
             ...this.state.playerName
         })
         .then((response) =>{      
-            if(response.data !== 'error name already exists'){
-                alert()
+            if(response.data !== 'good'){
+                alert(response.data)
+                return false
+            }
+            else{
+                return true
             }
         }, 
         (error) => {
@@ -61,11 +70,15 @@ class Home extends React.Component {
     logIn(){
         let loggedIn = false;
         if(this.state.playerName === ''){
-
+            alert("please enter a name")
+        }
+        else{
+            loggedIn = this.setUserName()
+            console.log("logged in")
         }
         
         this.setState({
-            loggedIn: true
+            loggedIn: loggedIn
         })
     }
 
@@ -88,19 +101,20 @@ class Home extends React.Component {
         if(this.state.userNames === null){
             this.getUserNames();
         }
-
-        if(!this.state.loggedIn){
-            login =  <ul>
-                        <label>Username : </label>   
-                        <input value = {this.state.playerName} onChange={this.inputUserName} type="text" placeholder="Enter Username" name="username" />  
-                        <DropDown value = {this.state.playerName} userNames = {this.state.userNames} onChange = {this.selectName}/>
-                        <Link to ='/Connect4' className = 'entry' onClick = {() => this.logIn()}>LogIn</Link>
-                        
-                    </ul>
-        }
-        else{
-            for(let i = 0; i < this.state.queuedGames.length; i ++){
-                queuedGamesHtml[i] = <a id = {i} onClick = {() => this.selectGame()}>{this.state.queuedGames[i].fillCount}</a>
+        if(this.state.userNames !== null){
+            if(!this.state.loggedIn){
+                login =  <ul>
+                            <label>Username : </label>   
+                            <input value = {this.state.playerName} onChange={this.inputUserName} type="text" placeholder="Enter Username" name="username" />  
+                            <DropDown value = {this.state.playerName} userNames = {this.state.userNames} onChange = {this.selectName}/>
+                            <button to ='/Connect4' className = 'entry' onClick = {() => this.logIn()}>LogIn</button>
+                            
+                        </ul>
+            }
+            else{
+                for(let i = 0; i < this.state.queuedGames.length; i ++){
+                    queuedGamesHtml[i] = <a id = {i} onClick = {() => this.selectGame()}>{this.state.queuedGames[i].fillCount}</a>
+                }
             }
         }
 

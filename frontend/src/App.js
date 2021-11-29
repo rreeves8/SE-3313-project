@@ -15,7 +15,7 @@ class App extends React.Component {
             <Router>
                 <Switch> 
                     <Route exact path='/'>               
-                        <Home setId = {this.setPlayerId}/>
+                        <Home/>
                     </Route>
                     <Route exact path='/Connect4'>
                         <Connect4/>
@@ -24,7 +24,6 @@ class App extends React.Component {
             </Router>
         )    
     }
-    
 }
 
 export default App;
